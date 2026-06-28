@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 
@@ -54,9 +55,23 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Role $role)
     {
-        //
+        $permissions = Permission::orderBy('name')->get();
+
+        $rolePermissions = $role
+            ->permissions
+            ->pluck('name')
+            ->toArray();
+
+        return view(
+            'roles.edit',
+            compact(
+                'role',
+                'permissions',
+                'rolePermissions'
+            )
+        );
     }
 
     /**

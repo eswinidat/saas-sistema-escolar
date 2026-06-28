@@ -18,6 +18,9 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::middleware('auth')->group(function () {
 
+    Route::post('/contexto/colegio', [\App\Http\Controllers\SchoolContextController::class, 'update'])
+        ->name('context.school.update');
+
     Route::resource('schools', SchoolController::class)
     ->middleware('role:Super Administrador');
 

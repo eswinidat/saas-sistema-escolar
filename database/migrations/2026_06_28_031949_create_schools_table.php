@@ -43,5 +43,10 @@ return new class extends Migration
 
         $table->timestamps();
     });
-}
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('schools');
+    }
 };

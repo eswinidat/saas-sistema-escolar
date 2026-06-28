@@ -2,125 +2,128 @@
 
 @section('content')
 
-<div class="container-fluid">
+<x-page-header
+    title="Roles"
+    subtitle="Administración de roles del sistema">
 
-    <div class="d-flex justify-content-between mb-3">
+    <x-slot:actions>
 
-        <h2>Roles</h2>
-
-        <a href="{{ route('roles.create') }}"
-           class="btn btn-primary">
+        <x-button
+            href="{{ route('roles.create') }}"
+            color="primary"
+            icon="bi bi-plus-circle">
 
             Nuevo Rol
 
-        </a>
+        </x-button>
 
-    </div>
+    </x-slot:actions>
 
-    @if(session('success'))
+</x-page-header>
 
-        <div class="alert alert-success">
+<x-alert />
 
-            {{ session('success') }}
+<x-card
+    title="Listado de Roles"
+    subtitle="Roles registrados en el sistema">
 
-        </div>
+    <table class="table table-bordered table-hover align-middle">
 
-    @endif
+        <thead class="table-light">
 
-    <div class="card">
+            <tr>
 
-        <div class="card-body">
+                <th width="80">ID</th>
 
-            <table class="table table-bordered table-hover">
+                <th>Nombre</th>
 
-                <thead>
+                <th width="260">Acciones</th>
 
-                    <tr>
+            </tr>
 
-                        <th>ID</th>
+        </thead>
 
-                        <th>Nombre</th>
+        <tbody>
 
-                        <th width="220">Acciones</th>
+            @forelse($roles as $role)
 
-                    </tr>
+                <tr>
 
-                </thead>
+                    <td>{{ $role->id }}</td>
 
-                <tbody>
+                    <td>{{ $role->name }}</td>
 
-                @forelse($roles as $role)
+                    <td>
 
-                    <tr>
+                        <x-button
+                            href="{{ route('roles.show', $role) }}"
+                            color="info"
+                            class="btn-sm"
+                            icon="bi bi-eye">
 
-                        <td>{{ $role->id }}</td>
+                            Ver
 
-                        <td>{{ $role->name }}</td>
+                        </x-button>
 
-                        <td>
+                        <x-button
+                            href="{{ route('roles.edit', $role) }}"
+                            color="warning"
+                            class="btn-sm"
+                            icon="bi bi-pencil-square">
 
-                            <a href="{{ route('roles.show',$role) }}"
-                               class="btn btn-info btn-sm">
+                            Editar
 
-                                Ver
+                        </x-button>
 
-                            </a>
+                        <form
+                            action="{{ route('roles.destroy', $role) }}"
+                            method="POST"
+                            class="d-inline">
 
-                            <a href="{{ route('roles.edit',$role) }}"
-                               class="btn btn-warning btn-sm">
+                            @csrf
+                            @method('DELETE')
 
-                                Editar
+                            <x-button
+                                color="danger"
+                                type="submit"
+                                class="btn-sm"
+                                icon="bi bi-trash"
+                                onclick="return confirm('¿Eliminar este rol?')">
 
-                            </a>
+                                Eliminar
 
-                            <form
-                                action="{{ route('roles.destroy',$role) }}"
-                                method="POST"
-                                class="d-inline">
+                            </x-button>
 
-                                @csrf
+                        </form>
 
-                                @method('DELETE')
+                    </td>
 
-                                <button
-                                    class="btn btn-danger btn-sm"
-                                    onclick="return confirm('¿Eliminar rol?')">
+                </tr>
 
-                                    Eliminar
+            @empty
 
-                                </button>
+                <tr>
 
-                            </form>
+                    <td colspan="3" class="text-center">
 
-                        </td>
+                        No existen roles registrados.
 
-                    </tr>
+                    </td>
 
-                @empty
+                </tr>
 
-                    <tr>
+            @endforelse
 
-                        <td colspan="3"
-                            class="text-center">
+        </tbody>
 
-                            No existen roles.
+    </table>
 
-                        </td>
+    <x-slot:footer>
 
-                    </tr>
+        {{ $roles->links() }}
 
-                @endforelse
+    </x-slot:footer>
 
-                </tbody>
-
-            </table>
-
-            {{ $roles->links() }}
-
-        </div>
-
-    </div>
-
-</div>
+</x-card>
 
 @endsection
