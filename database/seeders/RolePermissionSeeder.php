@@ -29,7 +29,7 @@ class RolePermissionSeeder extends Seeder
         $modules = [
             'students', 'parents', 'enrollments', 'academic_years',
             'levels', 'grades', 'sections', 'turns', 'teachers', 'courses',
-            'attendance', 'evaluations', 'payments', 'reports',
+            'attendance', 'evaluations', 'payments', 'billing', 'reports',
         ];
 
         return $this->crudPermissions($modules);
@@ -37,7 +37,7 @@ class RolePermissionSeeder extends Seeder
 
     protected function secretaryPermissions(): array
     {
-        $modules = ['students', 'parents', 'enrollments', 'attendance', 'evaluations', 'payments', 'reports'];
+        $modules = ['students', 'parents', 'enrollments', 'attendance', 'evaluations', 'payments', 'billing', 'reports'];
 
         return $this->crudPermissions($modules);
     }

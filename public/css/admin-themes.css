@@ -1,0 +1,90 @@
+/* Temas del panel admin por rol */
+
+.theme-super .app-sidebar {
+    background: linear-gradient(165deg, #0f172a 0%, #1e1b4b 45%, #312e81 100%) !important;
+}
+
+.theme-super .sidebar-brand .brand-text {
+    color: #e0e7ff !important;
+    font-weight: 600 !important;
+}
+
+.theme-super .app-header {
+    border-bottom: 3px solid #6366f1;
+}
+
+.theme-school .app-sidebar {
+    background: linear-gradient(165deg, #042f2e 0%, #0f766e 50%, #115e59 100%) !important;
+}
+
+.theme-school .sidebar-brand .brand-text {
+    color: #ccfbf1 !important;
+    font-weight: 600 !important;
+}
+
+.theme-school .app-header {
+    border-bottom: 3px solid #14b8a6;
+}
+
+.theme-teacher .app-sidebar {
+    background: linear-gradient(165deg, #3b0764 0%, #6d28d9 55%, #7c3aed 100%) !important;
+}
+
+.theme-teacher .sidebar-brand .brand-text {
+    color: #ede9fe !important;
+    font-weight: 600 !important;
+}
+
+.theme-teacher .app-header {
+    border-bottom: 3px solid #8b5cf6;
+}
+
+.theme-student .app-sidebar {
+    background: linear-gradient(165deg, #7c2d12 0%, #ea580c 55%, #f97316 100%) !important;
+}
+
+.theme-student .sidebar-brand .brand-text {
+    color: #ffedd5 !important;
+    font-weight: 600 !important;
+}
+
+.theme-student .app-header {
+    border-bottom: 3px solid #fb923c;
+}
+
+.panel-badge-super { background: #4f46e5 !important; }
+.panel-badge-school { background: #0d9488 !important; }
+.panel-badge-teacher { background: #7c3aed !important; }
+.panel-badge-student { background: #ea580c !important; }
+
+.dashboard-hero-super {
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%);
+    color: #fff;
+    border-radius: 0.75rem;
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-hero-school {
+    background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+    color: #fff;
+    border-radius: 0.75rem;
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-hero-teacher {
+    background: linear-gradient(135deg, #5b21b6 0%, #8b5cf6 100%);
+    color: #fff;
+    border-radius: 0.75rem;
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-hero-student {
+    background: linear-gradient(135deg, #c2410c 0%, #fb923c 100%);
+    color: #fff;
+    border-radius: 0.75rem;
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.5rem;
+}

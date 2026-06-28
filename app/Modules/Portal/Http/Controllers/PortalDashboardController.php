@@ -4,7 +4,9 @@ namespace App\Modules\Portal\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Attendance\Models\AttendanceRecord;
+use App\Modules\Grades\Models\GradingPeriod;
 use App\Modules\Grades\Models\StudentGrade;
+use App\Modules\Grades\Services\ReportCardPdfService;
 use App\Modules\Portal\Services\ParentPortalService;
 use App\Modules\Treasury\Models\StudentCharge;
 use Illuminate\Http\Request;
@@ -12,7 +14,10 @@ use Inertia\Inertia;
 
 class PortalDashboardController extends Controller
 {
-    public function __construct(protected ParentPortalService $portal) {}
+    public function __construct(
+        protected ParentPortalService $portal,
+        protected ReportCardPdfService $reportCardPdf,
+    ) {}
 
     public function index(Request $request)
     {
@@ -32,14 +37,32 @@ class PortalDashboardController extends Controller
         }
 
         return Inertia::render('Portal/Dashboard', [
+            ...$this->portalContext($request, $student, $students),
+            'stats' => $stats,
+        ]);
+    }
+
+    protected function portalContext(Request $request, $student, $students): array
+    {
+        $school = $request->user()->school;
+
+        $hour = (int) now()->format('H');
+        $greeting = $hour < 12 ? 'Buenos días' : ($hour < 18 ? 'Buenas tardes' : 'Buenas noches');
+
+        return [
             'students' => $students->map(fn ($s) => [
                 'id' => $s->id,
                 'name' => $s->fullName(),
                 'section' => optional($s->activeEnrollment()?->section)->fullName(),
             ]),
             'selectedStudentId' => $student?->id,
-            'stats' => $stats,
-        ]);
+            'selectedStudent' => $student ? [
+                'name' => $student->fullName(),
+                'section' => optional($student->activeEnrollment()?->section)->fullName(),
+            ] : null,
+            'school' => $school ? ['name' => $school->name, 'ruc' => $school->ruc] : null,
+            'greeting' => $greeting.', '.$request->user()->name,
+        ];
     }
 
     public function grades(Request $request)
@@ -63,11 +86,30 @@ class PortalDashboardController extends Controller
                 ])
             : collect();
 
+        $periods = GradingPeriod::orderByDesc('id')->get()
+            ->map(fn ($p) => ['id' => $p->id, 'name' => $p->name]);
+
         return Inertia::render('Portal/Grades', [
             'students' => $students->map(fn ($s) => ['id' => $s->id, 'name' => $s->fullName()]),
             'selectedStudentId' => $student?->id,
             'grades' => $grades,
+            'periods' => $periods,
         ]);
+    }
+
+    public function libretaPdf(Request $request)
+    {
+        $request->validate([
+            'student_id' => ['required', 'integer'],
+            'grading_period_id' => ['required', 'integer', 'exists:grading_periods,id'],
+        ]);
+
+        $student = $this->portal->selectedStudent($request->user(), (int) $request->student_id);
+        abort_unless($student, 403);
+
+        $period = GradingPeriod::findOrFail($request->grading_period_id);
+
+        return $this->reportCardPdf->download($student, $period);
     }
 
     public function attendance(Request $request)

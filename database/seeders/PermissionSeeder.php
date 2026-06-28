@@ -30,6 +30,7 @@ class PermissionSeeder extends Seeder
             'attendance',
             'evaluations',
             'payments',
+            'billing',
             'reports',
         ];
 

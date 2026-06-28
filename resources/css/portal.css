@@ -1,3 +1,85 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+@layer base {
+    body {
+        font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    }
+}
+
+@layer components {
+    .portal-shell {
+        @apply min-h-screen bg-slate-50;
+        background-image:
+            radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.12), transparent),
+            radial-gradient(ellipse 60% 40% at 100% 0%, rgba(20, 184, 166, 0.08), transparent);
+    }
+
+    .portal-sidebar {
+        @apply hidden lg:flex lg:flex-col lg:w-72 lg:fixed lg:inset-y-0 bg-white border-r border-slate-200/80 shadow-sm;
+    }
+
+    .portal-nav-link {
+        @apply flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 transition-all duration-200;
+    }
+
+    .portal-nav-link:hover {
+        @apply bg-indigo-50 text-indigo-700;
+    }
+
+    .portal-nav-link.active {
+        @apply bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-200;
+    }
+
+    .portal-stat-card {
+        @apply relative overflow-hidden rounded-2xl p-5 text-white shadow-lg transition-transform duration-200 hover:-translate-y-0.5;
+    }
+
+    .portal-stat-card .stat-icon {
+        @apply absolute -right-2 -bottom-2 text-6xl opacity-20;
+    }
+
+    .portal-quick-card {
+        @apply relative overflow-hidden rounded-2xl bg-white p-6 border border-slate-100 shadow-sm transition-all duration-200 hover:shadow-lg hover:border-indigo-100 hover:-translate-y-0.5;
+    }
+
+    .portal-quick-card .quick-icon {
+        @apply flex h-12 w-12 items-center justify-center rounded-xl text-xl transition-transform group-hover:scale-110;
+    }
+
+    .portal-hero {
+        @apply relative overflow-hidden rounded-3xl p-8 text-white shadow-xl;
+        background: linear-gradient(135deg, #4338ca 0%, #6366f1 40%, #0d9488 100%);
+    }
+
+    .portal-hero::before {
+        content: '';
+        @apply absolute inset-0 opacity-30;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .portal-mobile-nav {
+        @apply fixed bottom-0 inset-x-0 z-50 flex lg:hidden items-center justify-around bg-white/95 backdrop-blur border-t border-slate-200 px-2 py-2;
+    }
+
+    .portal-mobile-link {
+        @apply flex flex-col items-center gap-0.5 px-3 py-2 text-[10px] font-medium text-slate-500 rounded-lg transition;
+    }
+
+    .portal-mobile-link.active {
+        @apply text-indigo-600 bg-indigo-50;
+    }
+
+    .portal-select {
+        @apply w-full rounded-xl border-slate-200 bg-white px-4 py-2.5 text-sm shadow-sm focus:border-indigo-400 focus:ring-indigo-400;
+    }
+
+    .portal-table-card {
+        @apply bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden;
+    }
+
+    .portal-badge {
+        @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold;
+    }
+}

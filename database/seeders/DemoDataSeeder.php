@@ -282,6 +282,62 @@ class DemoDataSeeder extends Seeder
             ]
         );
 
+        $payment = \App\Modules\Treasury\Models\Payment::where('receipt_number', 'REC-2026-001')->first();
+        $director = \App\Models\User::where('email', 'director@sanmartin.edu.pe')->first();
+
+        \App\Modules\Billing\Models\SunatSetting::firstOrCreate(
+            ['school_id' => $school->id],
+            [
+                'business_name' => $school->name,
+                'ruc' => $school->ruc,
+                'address' => $school->address,
+                'boleta_series' => 'B001',
+                'factura_series' => 'F001',
+                'nota_credito_series' => 'FC01',
+                'ose_provider' => 'demo',
+                'is_production' => false,
+                'is_active' => true,
+            ]
+        );
+
+        if ($payment && $director) {
+            $doc = \App\Modules\Billing\Models\ElectronicDocument::firstOrCreate(
+                ['school_id' => $school->id, 'full_number' => 'B001-00000001'],
+                [
+                    'payment_id' => $payment->id,
+                    'student_id' => $student->id,
+                    'document_type' => '03',
+                    'series' => 'B001',
+                    'number' => 1,
+                    'issue_date' => $payment->payment_date,
+                    'customer_doc_type' => '1',
+                    'customer_doc_number' => $guardian->document_number,
+                    'customer_name' => $guardian->fullName(),
+                    'subtotal' => round(200 / 1.18, 2),
+                    'igv' => round(200 - (200 / 1.18), 2),
+                    'total' => 200.00,
+                    'status' => 'accepted',
+                    'sunat_hash' => strtoupper(\Illuminate\Support\Str::random(40)),
+                    'qr_data' => implode('|', [$school->ruc, '03', 'B001', 1, number_format(round(200 - (200 / 1.18), 2), 2, '.', ''), '200.00', $payment->payment_date->format('Y-m-d'), '1', $guardian->document_number]),
+                    'sunat_response' => 'Comprobante aceptado (modo demo).',
+                    'issued_by' => $director->id,
+                    'sent_at' => now(),
+                ]
+            );
+
+            \App\Modules\Billing\Models\ElectronicDocumentItem::firstOrCreate(
+                ['electronic_document_id' => $doc->id, 'line' => 1],
+                [
+                    'description' => 'Pensión mensual — Marzo 2026',
+                    'quantity' => 1,
+                    'unit_price' => 200.00,
+                    'subtotal' => round(200 / 1.18, 2),
+                    'igv' => round(200 - (200 / 1.18), 2),
+                    'total' => 200.00,
+                ]
+            );
+        }
+
         $padreUser = \App\Models\User::firstOrCreate(
             ['email' => 'padre@sanmartin.edu.pe'],
             [
@@ -293,5 +349,15 @@ class DemoDataSeeder extends Seeder
         );
         $padreUser->syncRoles(['Padre']);
         $guardian->update(['user_id' => $padreUser->id]);
+
+        $superAdmin = \App\Models\User::where('email', 'admin@sistema.edu.pe')->first();
+        $director = \App\Models\User::where('email', 'director@sanmartin.edu.pe')->first();
+
+        if ($superAdmin && $director) {
+            $chat = app(\App\Services\ChatService::class);
+            $conversation = $chat->findOrCreateDirect($superAdmin, $director);
+            $chat->send($conversation, $director, 'Hola, necesitamos activar facturación SUNAT para el colegio.');
+            $chat->send($conversation, $superAdmin, '¡Hola! Claro, revisa Facturación → Configuración SUNAT en modo demo. Estoy disponible para cualquier consulta.');
+        }
     }
 }

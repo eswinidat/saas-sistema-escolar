@@ -20,6 +20,7 @@ class ModuleServiceProvider extends ServiceProvider
         $this->loadModuleRoutes('Attendance');
         $this->loadModuleRoutes('Grades');
         $this->loadModuleRoutes('Treasury');
+        $this->loadModuleRoutes('Billing');
         $this->loadModuleRoutes('Portal');
     }
 

@@ -9,7 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -33,6 +33,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::prefix('chat')->name('chat.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\ChatController::class, 'index'])->name('index');
+        Route::get('/iniciar/{contact}', [\App\Http\Controllers\ChatController::class, 'start'])->name('start');
+        Route::get('/{conversation}', [\App\Http\Controllers\ChatController::class, 'show'])->name('show');
+        Route::post('/{conversation}', [\App\Http\Controllers\ChatController::class, 'store'])->name('store');
+    });
 
 });
 

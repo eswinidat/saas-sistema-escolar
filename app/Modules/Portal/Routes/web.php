@@ -10,6 +10,7 @@ Route::prefix('portal')
     ->group(function () {
         Route::get('/', [PortalDashboardController::class, 'index'])->name('dashboard');
         Route::get('/notas', [PortalDashboardController::class, 'grades'])->name('grades');
+        Route::get('/libreta/pdf', [PortalDashboardController::class, 'libretaPdf'])->name('libreta.pdf');
         Route::get('/asistencia', [PortalDashboardController::class, 'attendance'])->name('attendance');
         Route::get('/pagos', [PortalDashboardController::class, 'payments'])->name('payments');
     });
